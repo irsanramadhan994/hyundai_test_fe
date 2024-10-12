@@ -4,6 +4,7 @@ import { View, Text, FlatList, Button, TextInput, StyleSheet } from 'react-nativ
 import { getTasks, deleteTask } from "../../services/AuthService";
 import { router } from "expo-router";
 import TaskCreateButton from '@/components/TaskCreateButton';
+import CreateButton from '@/components/CreateButton';
 
 const TaskList = ({ navigation }: any) => {
   const [tasks, setTasks] = useState([]);
@@ -11,6 +12,10 @@ const TaskList = ({ navigation }: any) => {
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  useEffect(() => {
+    fetchTasks();
+  }, [router]);
 
   const fetchTasks = async () => {
     try {
@@ -27,17 +32,20 @@ const TaskList = ({ navigation }: any) => {
   };
 
   return (
-    <View>
-      <TaskCreateButton title='CREATE TASK' onClick={()=>router.navigate('/(tabs)/(task)/create')} />
+    <View style={styles.container}>
+      <CreateButton title='CREATE TASK' onClick={()=>router.navigate('/(tabs)/(task)/create')} />
 
       <FlatList
+      style={styles.container}
         data={tasks}
         keyExtractor={(item:any) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.list}> 
             <Text>{item.title}</Text>
-            <Button title="Details" onPress={() => navigation.navigate('TaskDetails', { id: item.id })} />
+            <View style={styles.buttonContainer}>
+            <Button title="Details" onPress={() => router.setParams({task:item.id})} />
             <Button title="Delete" onPress={() => handleDelete(item.id)} />
+            </View>
           </View>
         )}
       />
@@ -52,11 +60,22 @@ export default TaskList;
 
 
 const styles = StyleSheet.create({
+  container:{
+    padding:20,
+    display:"flex",
+    flexDirection:"column",
+    gap:10
+  },
+  buttonContainer:{
+    flexDirection:"row",
+    display:"flex"
+  },
   list:{
     flexDirection:"row",
     alignItems:"center",
     padding:10,
     marginLeft:10,
+    justifyContent:"space-between",
     marginRight:10,
     backgroundColor:"#fff",
     borderRadius:16,

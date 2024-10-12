@@ -16,6 +16,8 @@ export default function TaskLayout() {
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack initialRouteName='create'>
           <Stack.Screen name="create" options={{ headerShown: false }} />
+          <Stack.Screen name="detail" options={{ headerShown: false }} />
+
 
         </Stack>
       </ThemeProvider>

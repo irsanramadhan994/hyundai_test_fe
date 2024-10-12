@@ -63,7 +63,7 @@ const LoginScreen: React.FC = () => {
           onChangeText={(val: string) => setConfirmPassword(val)}
         />}
         <LoginButton title="Submit" onClick={handleSubmit} />
-        <LoginButton title={isRegister? "SIGN UP":"LOGIN"} onClick={handleSetIsRegister} />
+        <LoginButton title={!isRegister? "SIGN UP":"LOGIN"} onClick={handleSetIsRegister} />
 
       </LoginFormContainer>
     </View>

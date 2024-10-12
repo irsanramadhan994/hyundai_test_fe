@@ -7,11 +7,13 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import { Modal, Portal } from "react-native-paper";
 import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from 'dayjs';
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { createTask } from "../../../services/AuthService";
 import DropDownPicker from "react-native-dropdown-picker";
 
-const CreateTaskScreen = () => {
+const DetailTaskScreen = () => {
+  const { task } = useLocalSearchParams<{ task: string }>();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [visible, setVisible] = useState(false);
@@ -96,7 +98,7 @@ const CreateTaskScreen = () => {
   );
 };
 
-export default CreateTaskScreen;
+export default DetailTaskScreen;
 
 const styles = StyleSheet.create({
   container: {
