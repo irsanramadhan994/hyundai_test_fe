@@ -48,12 +48,12 @@ const CreateTaskScreen = () => {
         <TaskTextInput
           onChangeText={setTitle}
           value={title}
-          placeholder="title"
+          placeholder="Title"
         />
         <TaskTextInput
           onChangeText={setDescription}
           value={description}
-          placeholder="title"
+          placeholder="Description"
         />
          <TextInput
          style={styles.input}

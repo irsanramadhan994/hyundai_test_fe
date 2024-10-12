@@ -16,7 +16,7 @@ export default function LoginTextInput ({onChangeText,placeholder,value,type}:Pr
 
     return(
 
-        <TextInput  autoCorrect={false} secureTextEntry={type === 'password' ? true :false}  onChangeText={onChangeText} value={value} placeholder={placeholder} style={styles.input} />
+        <TextInput  autoCapitalize={"none"} autoCorrect={false} secureTextEntry={type === 'password' ? true :false}   onChangeText={onChangeText} value={value} placeholder={placeholder} style={styles.input} />
     )
 }
 
