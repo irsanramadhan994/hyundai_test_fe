@@ -2,20 +2,20 @@ import { ThemeProvider,DarkTheme, DefaultTheme,  } from "@react-navigation/nativ
 import { Stack } from "expo-router";
 import { useColorScheme } from "react-native";
 
-export default function TaskLayout() {
+export default function TaskDetailLayout() {
 
   
-    return <TaskLayoutNav />;
+    return <TaskDetailLayoutNav />;
   }
   
-  function TaskLayoutNav() {
+  function TaskDetailLayoutNav() {
     const colorScheme = useColorScheme();
 
   
     return (
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack initialRouteName='create'>
-          <Stack.Screen name="create" options={{ header: () => null }} />
+        <Stack initialRouteName='[task]'>
+          <Stack.Screen name="[task]" options={{ header: () => null }} />
          
 
 

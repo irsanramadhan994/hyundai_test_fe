@@ -38,11 +38,11 @@ export const getTasks = () => {
   return api.get('/task');
 };
 
-export const getTaskDetails = (id: number) => {
+export const getTaskDetails = (id: string) => {
   return api.get(`/task/${id}`);
 };
 
-export const updateTask = (id: number, task: any) => {
+export const updateTask = (id: string, task: any) => {
   return api.put(`/task/${id}`, task);
 };
 

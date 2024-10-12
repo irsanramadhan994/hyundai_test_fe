@@ -2,12 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Button, TextInput, StyleSheet } from 'react-native';
 import { getTasks, deleteTask } from "../../services/AuthService";
-import { router } from "expo-router";
-import TaskCreateButton from '@/components/TaskCreateButton';
+import { Link, router } from "expo-router";
+import { usePathname } from 'expo-router';
 import CreateButton from '@/components/CreateButton';
 
 const TaskList = ({ navigation }: any) => {
   const [tasks, setTasks] = useState([]);
+  const pathname = usePathname();
 
   useEffect(() => {
     fetchTasks();
@@ -15,7 +16,7 @@ const TaskList = ({ navigation }: any) => {
 
   useEffect(() => {
     fetchTasks();
-  }, [router]);
+  }, [pathname]);
 
   const fetchTasks = async () => {
     try {
@@ -43,7 +44,14 @@ const TaskList = ({ navigation }: any) => {
           <View style={styles.list}> 
             <Text>{item.title}</Text>
             <View style={styles.buttonContainer}>
-            <Button title="Details" onPress={() => router.setParams({task:item.id})} />
+            <Link
+            style={styles.link}
+               href={{
+                 pathname: '/(tabs)/(task)/(details)/[task]',
+                 params: { task: item.id}
+               }}>
+                 Details
+               </Link>
             <Button title="Delete" onPress={() => handleDelete(item.id)} />
             </View>
           </View>
@@ -68,7 +76,12 @@ const styles = StyleSheet.create({
   },
   buttonContainer:{
     flexDirection:"row",
-    display:"flex"
+    display:"flex",
+    alignItems:"center"
+  },
+  link:{
+        color:"#007AFF",
+        fontSize:18
   },
   list:{
     flexDirection:"row",

@@ -2,18 +2,16 @@ import TaskCreateButton from "@/components/TaskCreateButton";
 import TaskFormContainer from "@/components/TaskFormContainer";
 import TaskOptionPicker from "@/components/TaskOption";
 import TaskTextInput from "@/components/TaskTextInput";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { Modal, Portal } from "react-native-paper";
 import DateTimePicker from "react-native-ui-datepicker";
 import dayjs from 'dayjs';
-import { router, useLocalSearchParams } from "expo-router";
-import { createTask } from "../../../services/AuthService";
+import { router, useGlobalSearchParams } from "expo-router";
+import {getTaskDetails , updateTask } from "../../../../services/AuthService";
 import DropDownPicker from "react-native-dropdown-picker";
 
 const DetailTaskScreen = () => {
-  const { task } = useLocalSearchParams<{ task: string }>();
-
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [visible, setVisible] = useState(false);
@@ -24,13 +22,29 @@ const DetailTaskScreen = () => {
     { label: 'High', value: 'high' },
     { label: 'Normal', value: 'normal' },
   ]);
+  const {task} = useGlobalSearchParams<{task:string}>()
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const containerStyle = { backgroundColor: "white", margin: 20,padding:20 };
 
-  const handleCreateTask = async() => {
+  useEffect(  () => {
+    
+      getTaskDetails(task).then((x:any)=>
+      {
+        setDate(x.data.dueDate)
+        setTitle(x.data.title)
+        setDescription(x.data.description)
+        setValue(x.data.priority)
+      }
+      )
+   
+  }, [])
+  
+
+
+  const handleUpdateTask = async() => {
     try {
-      const response = await createTask({
+      const response = await updateTask(task,{
         "title": title,
         "description": description,
         "ownerId":"",
@@ -50,12 +64,12 @@ const DetailTaskScreen = () => {
         <TaskTextInput
           onChangeText={setTitle}
           value={title}
-          placeholder="title"
+          placeholder="Title"
         />
         <TaskTextInput
           onChangeText={setDescription}
           value={description}
-          placeholder="title"
+          placeholder="Description"
         />
          <TextInput
          style={styles.input}
@@ -92,7 +106,7 @@ const DetailTaskScreen = () => {
           </Modal>
         </Portal>
 
-        <TaskCreateButton onClick={handleCreateTask} title="CREATE" />
+        <TaskCreateButton onClick={handleUpdateTask} title="UPDATE" />
       </TaskFormContainer>
     </View>
   );
