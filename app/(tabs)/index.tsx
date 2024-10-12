@@ -1,31 +1,66 @@
-import { StyleSheet } from 'react-native';
+// src/screens/TaskList.tsx
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, Button, TextInput, StyleSheet } from 'react-native';
+import { getTasks, deleteTask } from "../../services/AuthService";
+import { router } from "expo-router";
+import TaskCreateButton from '@/components/TaskCreateButton';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+const TaskList = ({ navigation }: any) => {
+  const [tasks, setTasks] = useState([]);
 
-export default function TabOneScreen() {
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await getTasks();
+      setTasks(response.data);
+    } catch (error) {
+      console.error('Error fetching tasks', error);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    await deleteTask(id);
+    fetchTasks();
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+    <View>
+      <TaskCreateButton title='CREATE TASK' onClick={()=>router.navigate('/(tabs)/(task)/create')} />
+
+      <FlatList
+        data={tasks}
+        keyExtractor={(item:any) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.list}> 
+            <Text>{item.title}</Text>
+            <Button title="Details" onPress={() => navigation.navigate('TaskDetails', { id: item.id })} />
+            <Button title="Delete" onPress={() => handleDelete(item.id)} />
+          </View>
+        )}
+      />
+      
+         
+
     </View>
   );
-}
+};
+
+export default TaskList;
+
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
+  list:{
+    flexDirection:"row",
+    alignItems:"center",
+    padding:10,
+    marginLeft:10,
+    marginRight:10,
+    backgroundColor:"#fff",
+    borderRadius:16,
+    borderWidth:1,
+    borderColor:"#c4c4c4c4"
+  }
+})
